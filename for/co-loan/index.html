@@ -31,14 +31,14 @@
       <li><a href="#hinh-anh">Hình ảnh</a></li>
       <li><a href="#lich-trinh">Lịch trình</a></li>
       <li><a href="#dia-diem">Địa điểm</a></li>
-      <li><a href="#rsvp">RSVP</a></li>
+      <li><a href="#rsvp">Xác nhận tham dự</a></li>
+      <li><a href="#qua-mung" data-gift>Thiệp mừng</a></li>
     </ul>
   </div>
 </nav>
 
 <header class="hero" id="top">
   <picture>
-    <source media="(max-width:700px)" srcset="/img/hero-m.webp">
     <img src="/img/hero-d.webp" alt="Văn Tuấn và Ngọc Trâm bên sông lúc hoàng hôn" fetchpriority="high">
   </picture>
   <div class="wrap">
@@ -47,7 +47,7 @@
     <p class="date">26.12.2026</p>
     <p class="sub">Lễ cưới · Tiệc thân mật</p>
     <div class="ctas">
-      <a class="btn light" href="#rsvp">RSVP · Xác nhận tham dự</a>
+      <a class="btn light" href="#rsvp">Xác nhận tham dự</a>
       <a class="btn ghost" href="#lich-trinh" style="color:var(--white)">View the Day · Xem thông tin</a>
     </div>
   </div>
@@ -170,7 +170,7 @@
 
 <section class="rsvp center" id="rsvp">
   <div class="wrap">
-    <p class="eyebrow rv">RSVP · Xác nhận tham dự</p>
+    <p class="eyebrow rv">Xác nhận tham dự</p>
     <h2 class="rv">Bạn sẽ đến chứ?</h2>
     <p class="lead rv">Đừng quên để lại xác nhận tham dự để chúng mình chuẩn bị chu đáo hơn!</p>
     <div class="box rv" style="text-align:left">
@@ -198,14 +198,13 @@
 
 <section class="closing">
   <picture>
-    <source media="(max-width:700px)" srcset="/img/close-m.webp">
     <img src="/img/close-d.webp" loading="lazy" alt="Văn Tuấn và Ngọc Trâm lúc hoàng hôn">
   </picture>
   <div class="wrap rv">
     <h2>VĂN TUẤN &amp; NGỌC TRÂM</h2>
     <p class="cd">26 · 12 · 2026</p>
     <p class="s">See you there. · Hẹn gặp bạn.</p>
-    <a class="btn light" href="#rsvp">RSVP Now</a>
+    <a class="btn light" href="#rsvp">Xác nhận tham dự</a>
     <p style="margin-top:2rem;font-size:.85rem;letter-spacing:.2em;text-transform:uppercase;opacity:.85">Trân trọng biết ơn!</p>
   </div>
 </section>
@@ -238,139 +237,36 @@
     </div></div>
   </div>
 </section>
+<section class="wall" id="loi-chuc">
+  <div class="wrap">
+    <p class="eyebrow rv">Sổ lưu bút</p>
+    <h2 class="rv">Lời chúc yêu thương</h2>
+    <p class="wall-empty" id="wallEmpty">Hãy là người đầu tiên gửi lời chúc đến Văn Tuấn &amp; Ngọc Trâm.</p>
+    <div class="wall-list" id="wallList"></div>
+    <button class="btn ghost" type="button" id="wallMore" hidden>Xem thêm lời chúc</button>
+    <button class="btn" type="button" id="wallBtn">Gửi lời chúc</button>
+  </div>
+</section>
 <footer>VĂN TUẤN &amp; NGỌC TRÂM · 26.12.2026</footer>
 
+<button class="wishfab" id="wishfab" type="button" aria-expanded="false" aria-controls="wishbox">
+  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg>
+  <span>Gửi lời chúc</span>
+</button>
+<div class="wishbox" id="wishbox" role="dialog" aria-label="Gửi lời chúc" hidden>
+  <div class="wh"><b>Gửi lời chúc</b><button type="button" class="wx" id="wishx" aria-label="Đóng">×</button></div>
+  <form id="wishform" novalidate>
+    <label for="wname">Họ tên</label><input type="text" id="wname" autocomplete="name">
+    <label for="wmsg">Lời chúc</label><textarea id="wmsg" placeholder="Gửi đến Văn Tuấn &amp; Ngọc Trâm…"></textarea>
+    <p class="err" id="werr" role="alert"></p>
+    <button class="btn" type="submit">Gửi lời chúc</button>
+  </form>
+  <div class="wthanks" id="wthanks" hidden><b>Cảm ơn bạn!</b><p>Lời chúc đã được gửi đến cô dâu chú rể.</p></div>
+</div>
 <button class="music" id="music" type="button" aria-label="Bật nhạc nền" aria-pressed="false"><i></i><i></i><i></i><i></i></button>
 <audio id="bgm" src="/audio/music.mp3" loop preload="auto" autoplay></audio>
 
 <script>window.GUEST={"name": "Cô Loan", "plus": false};</script>
-<script>
-(function(){
-  /* ===== CONFIG: nội dung sự kiện (chỉ dùng dữ liệu từ thiệp) ===== */
-  var EVENT={
-    title:'Lễ cưới Văn Tuấn & Ngọc Trâm',
-    start:'2026-12-26T10:30:00+07:00',
-    durationHours:2, /* giả định để tạo lịch — cặp đôi chưa cung cấp giờ kết thúc */
-    place:'Kavin Garden Retreat, 57 HL2, Tân An Hội, Hồ Chí Minh',
-    map:'https://maps.app.goo.gl/vA7XKYzgMHdgnqVX6'
-  };
-  var RSVP_ENDPOINT='https://script.google.com/macros/s/AKfycbz2EpRIFv8VuuD5G2FCW5tcMZDepsveVd2eaoES-xgBol93xxLJGf-z8Tv7UGchYewimQ/exec'; /* dán URL Google Apps Script/Supabase khi dùng thật */
-
-  var $=function(s,c){return (c||document).querySelector(s)};
-  var $$=function(s,c){return [].slice.call((c||document).querySelectorAll(s))};
-
-  /* nav */
-  var nav=$('#nav');
-  function onScroll(){nav.classList.toggle('solid',window.scrollY>60)}
-  addEventListener('scroll',onScroll,{passive:true});onScroll();
-  $('#burger').onclick=function(){nav.classList.toggle('open')};
-  $$('#links a').forEach(function(a){a.onclick=function(){nav.classList.remove('open')}});
-
-  /* reveal */
-  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.15});
-  $$('.rv').forEach(function(el){io.observe(el)});
-
-  /* countdown */
-  var target=new Date(EVENT.start).getTime();
-  function pad(n){return n<10?'0'+n:''+n}
-  function tick(){
-    var d=Math.max(0,target-Date.now()),s=Math.floor(d/1000);
-    var v={d:Math.floor(s/86400),h:Math.floor(s%86400/3600),m:Math.floor(s%3600/60),s:s%60};
-    $$('#count b').forEach(function(b){var k=b.dataset.u;b.textContent=k==='d'?v.d:pad(v[k])});
-  }
-  tick();setInterval(tick,1000);
-
-  /* calendar */
-  function fmt(d){return d.toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,'')}
-  var st=new Date(EVENT.start),en=new Date(st.getTime()+EVENT.durationHours*3600e3);
-  $('#gcal').href='https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent(EVENT.title)+'&dates='+fmt(st)+'/'+fmt(en)+'&location='+encodeURIComponent(EVENT.place)+'&details='+encodeURIComponent('Bản đồ: '+EVENT.map);
-  $('#ics').onclick=function(){
-    try{
-      var ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//VanTuanNgocTram//Wedding//VI','BEGIN:VEVENT','UID:vantuan-ngoctram-20261226@wedding','DTSTAMP:'+fmt(new Date()),'DTSTART:'+fmt(st),'DTEND:'+fmt(en),'SUMMARY:'+EVENT.title,'LOCATION:'+EVENT.place.replace(/,/g,'\\,'),'DESCRIPTION:'+EVENT.map,'END:VEVENT','END:VCALENDAR'].join('\r\n');
-      var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([ics],{type:'text/calendar'}));a.download='van-tuan-ngoc-tram-26-12-2026.ics';document.body.appendChild(a);a.click();a.remove();
-    }catch(e){window.open($('#gcal').href,'_blank')}
-  };
-
-  /* gallery */
-  var G={
-    s:[['n1','Studio · hoa khô'],['s3','Studio · hoa khô'],['n2','Studio · hoa khô'],['s4','Studio · hoa khô'],['l7','Studio · hoa khô'],['s5','Studio · hoa khô'],['n3','Studio · chú rể']],
-    t:[['t1','Hoàng hôn bên sông'],['t4','Hoàng hôn bên sông'],['t2','Hoàng hôn bên sông'],['t5','Hoàng hôn bên sông'],['t3','Hoàng hôn bên sông'],['t8','Hoàng hôn bên sông'],['t6','Hoàng hôn bên sông'],['t9','Hoàng hôn bên sông'],['t7','Hoàng hôn bên sông']],
-    l:[['l1','Góc phố cổ'],['l2','Góc phố cổ'],['l3','Góc phố cổ'],['l4','Góc phố cổ'],['l5','Góc phố cổ'],['l10','Góc phố cổ'],['l9','Góc phố cổ'],['l8','Góc phố cổ'],['l11','Góc phố cổ']]
-  };
-  var cur='s',list=[],idx=0,grid=$('#grid');
-  function render(k){
-    cur=k;list=G[k];grid.innerHTML='';
-    list.forEach(function(it,i){
-      var f=document.createElement('figure'),im=new Image();
-      im.src='/img/'+it[0]+'.webp';im.alt=it[1];im.loading='lazy';
-      f.appendChild(im);f.onclick=function(){open(i)};grid.appendChild(f);
-    });
-    $$('.tab').forEach(function(t){t.setAttribute('aria-selected',t.dataset.g===k)});
-  }
-  $$('.tab').forEach(function(t){t.onclick=function(){render(t.dataset.g)}});
-  render('s');
-  var lb=$('#lb'),lbimg=$('#lbimg');
-  function open(i){idx=(i+list.length)%list.length;lbimg.src='/img/'+list[idx][0]+'.webp';lbimg.alt=list[idx][1];lb.classList.add('on')}
-  function close(){lb.classList.remove('on')}
-  $('.x',lb).onclick=close;$('.p',lb).onclick=function(){open(idx-1)};$('.n',lb).onclick=function(){open(idx+1)};
-  lb.onclick=function(e){if(e.target===lb)close()};
-  addEventListener('keydown',function(e){if(!lb.classList.contains('on'))return;if(e.key==='Escape')close();if(e.key==='ArrowLeft')open(idx-1);if(e.key==='ArrowRight')open(idx+1)});
-
-  /* music: thử tự phát; nếu trình duyệt chặn thì phát ở lần chạm/bấm đầu tiên */
-  var mb=$('#music'),au=$('#bgm');
-  function setOn(on){mb.classList.toggle('on',on);mb.setAttribute('aria-pressed',on);mb.setAttribute('aria-label',on?'Tắt nhạc nền':'Bật nhạc nền')}
-  var userPaused=false;
-  function start(){
-    var pr=au.play();
-    if(pr&&pr.then){pr.then(function(){setOn(true);unbind()}).catch(function(){})}
-  }
-  var evs=['pointerdown','touchend','click','keydown'];
-  function onFirst(e){if(userPaused||(mb.contains&&mb.contains(e.target)))return;start()}
-  function unbind(){evs.forEach(function(t){document.removeEventListener(t,onFirst,true)})}
-  evs.forEach(function(t){document.addEventListener(t,onFirst,true)});
-  au.volume=0.7;start();
-  mb.onclick=function(){
-    if(au.paused){userPaused=false;start()}
-    else{userPaused=true;au.pause();setOn(false);unbind()}
-  };
-
-  /* gift box */
-  var gb=$('#gbtn'),gp=$('#gpanel');
-  gb.onclick=function(){var on=gb.getAttribute('aria-expanded')!=='true';gb.setAttribute('aria-expanded',on);gp.classList.toggle('on',on);if(on)setTimeout(function(){gp.scrollIntoView({behavior:'smooth',block:'center'})},350)};
-  $$('.copy').forEach(function(b){b.onclick=function(){
-    var n=b.dataset.num,old=b.textContent;
-    function ok(){b.textContent='Đã sao chép';setTimeout(function(){b.textContent=old},1800)}
-    try{navigator.clipboard.writeText(n).then(ok,function(){b.textContent=n})}catch(e){b.textContent=n}
-  }});
-
-  /* khách mời cá nhân hoá (trang /for/<slug>) */
-  var GU=window.GUEST;
-  if(GU&&GU.name){
-    var gg=$('#guestGreet');gg.hidden=false;$('#gname').textContent=GU.name;
-    $('#name').value=GU.name;
-    if(GU.plus)setTimeout(function(){sel.value='2'},0);
-  }
-
-  /* RSVP */
-  var sel=$('#guests');
-  for(var i=1;i<=10;i++){var o=document.createElement('option');o.value=i;o.textContent=i;sel.appendChild(o)}
-  $$('input[name=attend]').forEach(function(r){r.onchange=function(){$('#gf').style.display=this.value==='no'?'none':''}});
-  $('#form').onsubmit=function(e){
-    e.preventDefault();
-    var name=$('#name').value.trim();
-    if(!name){$('#err').textContent='Vui lòng nhập họ tên.';$('#name').focus();return}
-    $('#err').textContent='';
-    var attend=$('input[name=attend]:checked').value;
-    var data={name:name,attend:attend,guests:attend==='yes'?+sel.value:0,note:$('#msg').value.trim(),at:new Date().toISOString()};
-    function done(){$('#form').style.display='none';$('#thanks').style.display='block'}
-    if(RSVP_ENDPOINT){
-      fetch(RSVP_ENDPOINT,{method:'POST',mode:'no-cors',body:JSON.stringify(data)}).then(done).catch(function(){$('#err').textContent='Chưa gửi được, vui lòng thử lại.'});
-    }else{
-      try{var all=JSON.parse(localStorage.getItem('rsvps')||'[]');all.push(data);localStorage.setItem('rsvps',JSON.stringify(all))}catch(x){}
-      done();
-    }
-  };
-})();
-</script>
+<script src="/script.js"></script>
 </body>
 </html>
