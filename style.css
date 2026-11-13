@@ -250,3 +250,13 @@ footer{background:var(--espresso);color:rgba(246,241,232,.6);text-align:center;p
 }
 
 .wall [hidden]{display:none!important}
+
+.thx{position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;padding:24px;text-align:center;background:rgba(41,35,31,.98);color:var(--white);opacity:0;transition:opacity .35s}
+.thx.on{opacity:1}
+.thx-in{max-width:520px;transform:translateY(14px);transition:transform .45s var(--ease)}
+.thx.on .thx-in{transform:none}
+.thx-mark{display:inline-flex;align-items:center;justify-content:center;width:64px;height:64px;border-radius:50%;border:1px solid var(--champagne);color:var(--champagne);font-size:1.6rem;margin-bottom:1.4rem}
+.thx .eyebrow{color:var(--champagne)}
+.thx h2{font-size:clamp(3rem,10vw,5.2rem);margin:.4rem 0 1rem}
+.thx-t{font-family:var(--serif);font-style:italic;font-size:1.3rem;line-height:1.5;margin:0 0 2rem;opacity:.92}
+.thx .btn{background:var(--white);color:var(--burgundy)}

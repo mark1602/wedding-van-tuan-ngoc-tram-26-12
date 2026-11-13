@@ -122,6 +122,17 @@
   }
   wallLoad();
 
+  /* Popup toàn màn hình: cảm ơn sau khi gửi lời chúc */
+  function thanksFull(n){
+    var o=document.createElement('div');o.className='thx';o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');o.setAttribute('aria-label','Cảm ơn bạn');
+    o.innerHTML='<div class="thx-in"><span class="thx-mark" aria-hidden="true">&#10003;</span><p class="eyebrow">Đã gửi thành công</p><h2>Cảm ơn bạn!</h2><p class="thx-t"></p><button class="btn" type="button">Đóng</button></div>';
+    o.querySelector('.thx-t').textContent=(n?n+' ơi, l':'L')+'ời chúc của bạn đã được gửi đến Văn Tuấn & Ngọc Trâm và hiện trong Sổ lưu bút.';
+    function close(){document.removeEventListener('keydown',k);o.classList.remove('on');setTimeout(function(){o.remove()},350);var w=document.getElementById('loi-chuc');if(w&&w.scrollIntoView)w.scrollIntoView({behavior:'smooth',block:'center'})}
+    function k(e){if(e.key==='Escape')close()}
+    o.querySelector('button').onclick=close;o.addEventListener('click',function(e){if(e.target===o)close()});document.addEventListener('keydown',k);
+    document.body.appendChild(o);requestAnimationFrame(function(){o.classList.add('on');o.querySelector('button').focus()});
+  }
+
   /* Gửi lời chúc (popup góc dưới) */
   var wf=$('#wishfab'),wb=$('#wishbox');
   function wopen(on){wb.hidden=!on;wf.setAttribute('aria-expanded',on);if(on){if(GU&&GU.name&&!$('#wname').value)$('#wname').value=GU.name;setTimeout(function(){($('#wname').value?$('#wmsg'):$('#wname')).focus()},50)}}
@@ -135,7 +146,7 @@
     $('#werr').textContent='';
     var data={type:'wish',name:n,message:m,at:new Date().toISOString()};
     try{var mw=mine();mw.push({name:n,message:m});localStorage.setItem('mywishes',JSON.stringify(mw.slice(-20)))}catch(x){}
-    function ok(){addWish(data,true);$('#wishform').hidden=true;$('#wthanks').hidden=false;setTimeout(function(){wopen(false);$('#wishform').hidden=false;$('#wthanks').hidden=true;$('#wmsg').value=''},2600)}
+    function ok(){addWish(data,true);wopen(false);$('#wmsg').value='';thanksFull(n)}
     if(RSVP_ENDPOINT){fetch(RSVP_ENDPOINT,{method:'POST',mode:'no-cors',body:JSON.stringify(data)}).then(ok).catch(function(){$('#werr').textContent='Chưa gửi được, vui lòng thử lại.'})}
     else{try{var all=JSON.parse(localStorage.getItem('wishes')||'[]');all.push(data);localStorage.setItem('wishes',JSON.stringify(all))}catch(x){}ok()}
   };
