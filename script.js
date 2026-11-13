@@ -98,6 +98,19 @@
 
   /* khách mời cá nhân hoá (trang /for/<slug>) */
   var GU=window.GUEST;
+  if(!GU){ /* trang mặc định: lấy tên từ đường dẫn /for/<tên> */
+    var pm=location.pathname.match(/^\/for\/([^\/?#]+)/);
+    if(pm&&pm[1]!=='_default'){
+      var sl;try{sl=decodeURIComponent(pm[1])}catch(x){sl=pm[1]}
+      var gm=window.GUEST_MAP&&window.GUEST_MAP[sl.toLowerCase()];
+      if(gm)GU=gm;
+      else{
+        var nm=sl.replace(/[-_+]+/g,' ').replace(/\s+/g,' ').trim().split(' ').map(function(w){return w.charAt(0).toUpperCase()+w.slice(1)}).join(' ').slice(0,40);
+        if(nm)GU={name:nm,plus:false};
+      }
+      if(GU)document.title='Trân trọng kính mời '+(/^(Chị|Cô|Thầy|Anh|Em|Chú|Bác|C\.)/.test(GU.name)?'':'Bạn ')+GU.name+' | Thiệp cưới Văn Tuấn & Ngọc Trâm';
+    }
+  }
   if(GU&&GU.name){
     var gg=$('#guestGreet');gg.hidden=false;$('#gname').textContent=GU.name;
     $('#name').value=GU.name;
