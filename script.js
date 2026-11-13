@@ -114,9 +114,11 @@
   function addWish(w,top){if(top){wallAll.unshift({name:w.name,message:w.message});wallShown=Math.max(wallShown+1,Math.min(wallAll.length,WPAGE))}wallRender()}
   $('#wallMore').onclick=function(){wallShown+=WPAGE;wallRender()};
   $('#wallBtn').onclick=function(){wopen(true)};
+  function mine(){try{return JSON.parse(localStorage.getItem('mywishes')||'[]')}catch(x){return []}}
+  function wallMerge(srv){var seen={};srv.forEach(function(w){seen[w.name+'|'+w.message]=1});return mine().reverse().filter(function(w){return !seen[w.name+'|'+w.message]}).concat(srv)}
   function wallLoad(){
-    if(RSVP_ENDPOINT){fetch(RSVP_ENDPOINT+'?action=wishes').then(function(r){return r.json()}).then(function(j){wallAll=(j.wishes||[]).concat(wallAll.filter(function(x){return x._l}));wallShown=Math.min(wallAll.length,WPAGE);wallRender()}).catch(function(){wallRender()})}
-    else{try{wallAll=JSON.parse(localStorage.getItem('wishes')||'[]').reverse()}catch(x){}wallShown=Math.min(wallAll.length,WPAGE);wallRender()}
+    wallAll=wallMerge([]);wallShown=Math.min(wallAll.length,WPAGE);wallRender();
+    if(RSVP_ENDPOINT){fetch(RSVP_ENDPOINT+'?action=wishes&t='+Date.now()).then(function(r){return r.json()}).then(function(j){wallAll=wallMerge(j.wishes||[]);wallShown=Math.min(wallAll.length,WPAGE);wallRender()}).catch(function(){})}
   }
   wallLoad();
 
@@ -132,6 +134,7 @@
     if(!n||!m){$('#werr').textContent=!n?'Vui lòng nhập họ tên.':'Vui lòng nhập lời chúc.';return}
     $('#werr').textContent='';
     var data={type:'wish',name:n,message:m,at:new Date().toISOString()};
+    try{var mw=mine();mw.push({name:n,message:m});localStorage.setItem('mywishes',JSON.stringify(mw.slice(-20)))}catch(x){}
     function ok(){addWish(data,true);$('#wishform').hidden=true;$('#wthanks').hidden=false;setTimeout(function(){wopen(false);$('#wishform').hidden=false;$('#wthanks').hidden=true;$('#wmsg').value=''},2600)}
     if(RSVP_ENDPOINT){fetch(RSVP_ENDPOINT,{method:'POST',mode:'no-cors',body:JSON.stringify(data)}).then(ok).catch(function(){$('#werr').textContent='Chưa gửi được, vui lòng thử lại.'})}
     else{try{var all=JSON.parse(localStorage.getItem('wishes')||'[]');all.push(data);localStorage.setItem('wishes',JSON.stringify(all))}catch(x){}ok()}

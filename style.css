@@ -248,3 +248,5 @@ footer{background:var(--espresso);color:rgba(246,241,232,.6);text-align:center;p
   .closing::after{display:none}
   .closing .wrap{padding:36px 0 56px}
 }
+
+.wall [hidden]{display:none!important}
