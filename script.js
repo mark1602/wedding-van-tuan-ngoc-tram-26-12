@@ -1,4 +1,5 @@
 (function(){
+  var IMG=(location.pathname.indexOf('/for/')===0?'/':'')+'img/';
   /* ===== CONFIG: nội dung sự kiện (chỉ dùng dữ liệu từ thiệp) ===== */
   var EVENT={
     title:'Lễ cưới Văn Tuấn & Ngọc Trâm',
@@ -55,7 +56,7 @@
     cur=k;list=G[k];grid.innerHTML='';
     list.forEach(function(it,i){
       var f=document.createElement('figure'),im=new Image();
-      im.src='img/'+it[0]+'.webp';im.alt=it[1];im.loading='lazy';
+      im.src=IMG+it[0]+'.webp';im.alt=it[1];im.loading='lazy';
       f.appendChild(im);f.onclick=function(){open(i)};grid.appendChild(f);
     });
     $$('.tab').forEach(function(t){t.setAttribute('aria-selected',t.dataset.g===k)});
@@ -63,7 +64,7 @@
   $$('.tab').forEach(function(t){t.onclick=function(){render(t.dataset.g)}});
   render('s');
   var lb=$('#lb'),lbimg=$('#lbimg');
-  function open(i){idx=(i+list.length)%list.length;lbimg.src='img/'+list[idx][0]+'.webp';lbimg.alt=list[idx][1];lb.classList.add('on')}
+  function open(i){idx=(i+list.length)%list.length;lbimg.src=IMG+list[idx][0]+'.webp';lbimg.alt=list[idx][1];lb.classList.add('on')}
   function close(){lb.classList.remove('on')}
   $('.x',lb).onclick=close;$('.p',lb).onclick=function(){open(idx-1)};$('.n',lb).onclick=function(){open(idx+1)};
   lb.onclick=function(e){if(e.target===lb)close()};
