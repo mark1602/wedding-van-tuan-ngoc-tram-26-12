@@ -104,6 +104,24 @@
     if(GU.plus)setTimeout(function(){sel.value='2'},0);
   }
 
+  /* QR chuyển khoản tự điền nội dung: "<Tên khách> gui tien mung" (chỉ trang /for/...) */
+  if(GU&&GU.name){
+    var plain=GU.name.replace(/đ/g,'d').replace(/Đ/g,'D').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\([^)]*\)/g,' ').replace(/[^A-Za-z0-9 ]+/g,' ').replace(/\s+/g,' ').trim().slice(0,34).trim();
+    if(plain){
+      var memo=plain+' gui tien mung';
+      var BANKS={'9999222197':{bin:'970407',n:'NGUYEN VAN TUAN'},'1064306176':{bin:'970436',n:'PHAN NGUYEN NGOC TRAM'}};
+      $$('.gcard').forEach(function(c){
+        var b=c.querySelector('.copy'),im=c.querySelector('img'),k=b&&BANKS[b.getAttribute('data-num')];
+        if(!k||!im)return;
+        var old=im.src;
+        im.onerror=function(){im.onerror=null;im.src=old};
+        im.src='https://img.vietqr.io/image/'+k.bin+'-'+b.getAttribute('data-num')+'-qr_only.png?addInfo='+encodeURIComponent(memo)+'&accountName='+encodeURIComponent(k.n);
+        var p=document.createElement('p');p.className='gmemo';p.textContent='Nội dung chuyển khoản: '+memo;
+        c.insertBefore(p,b);
+      });
+    }
+  }
+
   /* Thiệp mừng (menu) mở hộp quà */
   $$('[data-gift]').forEach(function(a){a.addEventListener('click',function(){if(gb.getAttribute('aria-expanded')!=='true')gb.click()})});
 
