@@ -7,7 +7,11 @@
 <meta name="description" content="Wedding celebration of Văn Tuấn & Ngọc Trâm — 26 December 2026.">
 <meta property="og:title" content="Văn Tuấn & Ngọc Trâm — 26.12.2026">
 <meta property="og:description" content="Wedding celebration of Văn Tuấn & Ngọc Trâm — 26 December 2026.">
-<meta property="og:image" content="img/close-d.webp">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta property="og:image" content="https://wedding-van-tuan-ngoc-tram-26-12.vercel.app/img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="628">
+<meta property="og:url" content="https://wedding-van-tuan-ngoc-tram-26-12.vercel.app/">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -84,6 +88,8 @@ nav.solid{background:rgba(246,241,232,.94);backdrop-filter:blur(10px);color:var(
 /* invitation */
 .invite .names{font-family:var(--serif);font-size:clamp(2rem,5vw,3.2rem);font-style:italic;color:var(--burgundy);margin:1.4rem 0 .4rem}
 
+.gsmall{font-size:.78rem;letter-spacing:.28em;text-transform:uppercase;margin-top:1.6rem;opacity:.8}
+.gname{font-family:var(--serif);font-size:clamp(2.4rem,7vw,4.2rem);color:var(--wine);line-height:1.1;margin:.3rem 0 .2rem}
 /* families */
 .families{background:var(--white)}
 .fam-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,6vw,90px);margin-top:3rem;text-align:center}
@@ -255,6 +261,7 @@ footer{background:var(--espresso);color:rgba(246,241,232,.6);text-align:center;p
 <section class="invite center" id="thiep-moi">
   <div class="wrap rv">
     <p class="eyebrow">You're Invited · Trân trọng mời bạn</p>
+    <div id="guestGreet" hidden><p class="gsmall">Trân trọng kính mời</p><p class="gname" id="gname"></p></div>
     <p class="names">Một hành trình mới của chúng mình bắt đầu từ hôm nay</p>
     <div class="rule"></div>
     <p class="lead">Tham dự lễ cưới Văn Tuấn &amp; Ngọc Trâm. Trân trọng kính mời Quý Khách đến dự bữa tiệc thân mật cùng gia đình chúng tôi.</p>
@@ -539,6 +546,14 @@ footer{background:var(--espresso);color:rgba(246,241,232,.6);text-align:center;p
     function ok(){b.textContent='Đã sao chép';setTimeout(function(){b.textContent=old},1800)}
     try{navigator.clipboard.writeText(n).then(ok,function(){b.textContent=n})}catch(e){b.textContent=n}
   }});
+
+  /* khách mời cá nhân hoá (trang /for/<slug>) */
+  var GU=window.GUEST;
+  if(GU&&GU.name){
+    var gg=$('#guestGreet');gg.hidden=false;$('#gname').textContent=GU.name;
+    $('#name').value=GU.name;
+    if(GU.plus)setTimeout(function(){sel.value='2'},0);
+  }
 
   /* RSVP */
   var sel=$('#guests');
