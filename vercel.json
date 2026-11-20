@@ -1,5 +1,6 @@
 {
   "rewrites": [
+    { "source": "/for/nhagai", "destination": "/for/nhagai/index.html" },
     { "source": "/for/:slug", "destination": "/for/_default/index.html" }
   ]
 }
