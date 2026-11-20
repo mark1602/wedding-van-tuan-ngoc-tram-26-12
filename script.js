@@ -24,6 +24,17 @@
   var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.15});
   $$('.rv').forEach(function(el){io.observe(el)});
 
+  /* vé máy bay: trên điện thoại thu nhỏ nguyên bản desktop */
+  (function(){
+    var w=$('.pass-wrap'),p=w&&$('.pass',w);if(!p)return;
+    function fit(){
+      if(window.innerWidth<=760){var s=w.clientWidth/1000;p.style.transform='scale('+s+')';w.style.height=(p.offsetHeight*s)+'px'}
+      else{p.style.transform='';w.style.height=''}
+    }
+    fit();addEventListener('resize',fit);addEventListener('load',fit);
+    if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fit);
+  })();
+
   /* countdown */
   var target=new Date(EVENT.start).getTime();
   function pad(n){return n<10?'0'+n:''+n}
@@ -129,7 +140,7 @@
   $$('[data-gift]').forEach(function(a){a.addEventListener('click',function(){if(gb.getAttribute('aria-expanded')!=='true')gb.click()})});
 
   /* Tường lời chúc (đọc từ Google Sheet) */
-  var wallAll=[],wallShown=0,WPAGE=12;
+  var wallAll=[],wallShown=0,WPAGE=12,WALL_FROM=Date.parse('2026-11-21T00:00:00+07:00'); /* chỉ hiện lời chúc gửi từ mốc này trở đi; lời chúc cũ vẫn nằm trong Google Sheet nhưng bị ẩn */
   function wallItem(w){var d=document.createElement('div');d.className='wall-item';var p=document.createElement('p');p.textContent=w.message;var b=document.createElement('b');b.textContent=w.name;d.appendChild(p);d.appendChild(b);return d}
   function wallRender(){var L=$('#wallList');L.innerHTML='';wallAll.slice(0,wallShown).forEach(function(w){L.appendChild(wallItem(w))});$('#wallEmpty').hidden=wallAll.length>0;$('#wallMore').hidden=wallShown>=wallAll.length}
   function addWish(w,top){if(top){wallAll.unshift({name:w.name,message:w.message});wallShown=Math.max(wallShown+1,Math.min(wallAll.length,WPAGE))}wallRender()}
@@ -139,7 +150,7 @@
   function wallMerge(srv){var seen={};srv.forEach(function(w){seen[w.name+'|'+w.message]=1});return mine().reverse().filter(function(w){return !seen[w.name+'|'+w.message]}).concat(srv)}
   function wallLoad(){
     wallAll=wallMerge([]);wallShown=Math.min(wallAll.length,WPAGE);wallRender();
-    if(RSVP_ENDPOINT){fetch(RSVP_ENDPOINT+'?action=wishes&t='+Date.now()).then(function(r){return r.json()}).then(function(j){wallAll=wallMerge(j.wishes||[]);wallShown=Math.min(wallAll.length,WPAGE);wallRender()}).catch(function(){})}
+    if(RSVP_ENDPOINT){fetch(RSVP_ENDPOINT+'?action=wishes&t='+Date.now()).then(function(r){return r.json()}).then(function(j){wallAll=wallMerge((j.wishes||[]).filter(function(w){var t=Date.parse(w.at||w.time||w.timestamp||w.createdAt||'');return t>=WALL_FROM}));wallShown=Math.min(wallAll.length,WPAGE);wallRender()}).catch(function(){})}
   }
   wallLoad();
 
