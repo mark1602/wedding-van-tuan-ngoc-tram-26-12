@@ -3,7 +3,7 @@
   /* ===== CONFIG: nội dung sự kiện (chỉ dùng dữ liệu từ thiệp) ===== */
   var EVENT={
     title:'Lễ cưới Văn Tuấn & Ngọc Trâm',
-    start:'2026-12-26T10:30:00+07:00',
+    start:window.EVENT_START||'2026-12-26T11:00:00+07:00',
     durationHours:2, /* giả định để tạo lịch — cặp đôi chưa cung cấp giờ kết thúc */
     place:'Kavin Garden Retreat, 57 HL2, Tân An Hội, Hồ Chí Minh',
     map:'https://maps.app.goo.gl/vA7XKYzgMHdgnqVX6'
@@ -15,7 +15,7 @@
 
   /* nav */
   var nav=$('#nav');
-  function onScroll(){nav.classList.toggle('solid',window.scrollY>60)}
+  function onScroll(){}
   addEventListener('scroll',onScroll,{passive:true});onScroll();
   $('#burger').onclick=function(){nav.classList.toggle('open')};
   $$('#links a').forEach(function(a){a.onclick=function(){nav.classList.remove('open')}});
@@ -34,29 +34,18 @@
   }
   tick();setInterval(tick,1000);
 
-  /* calendar */
-  function fmt(d){return d.toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,'')}
-  var st=new Date(EVENT.start),en=new Date(st.getTime()+EVENT.durationHours*3600e3);
-  $('#gcal').href='https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent(EVENT.title)+'&dates='+fmt(st)+'/'+fmt(en)+'&location='+encodeURIComponent(EVENT.place)+'&details='+encodeURIComponent('Bản đồ: '+EVENT.map);
-  $('#ics').onclick=function(){
-    try{
-      var ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//VanTuanNgocTram//Wedding//VI','BEGIN:VEVENT','UID:vantuan-ngoctram-20261226@wedding','DTSTAMP:'+fmt(new Date()),'DTSTART:'+fmt(st),'DTEND:'+fmt(en),'SUMMARY:'+EVENT.title,'LOCATION:'+EVENT.place.replace(/,/g,'\\,'),'DESCRIPTION:'+EVENT.map,'END:VEVENT','END:VCALENDAR'].join('\r\n');
-      var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([ics],{type:'text/calendar'}));a.download='van-tuan-ngoc-tram-26-12-2026.ics';document.body.appendChild(a);a.click();a.remove();
-    }catch(e){window.open($('#gcal').href,'_blank')}
-  };
-
   /* gallery */
   var G={
-    s:[['n1','Studio · hoa khô'],['s3','Studio · hoa khô'],['n2','Studio · hoa khô'],['s4','Studio · hoa khô'],['l7','Studio · hoa khô'],['s5','Studio · hoa khô'],['n3','Studio · chú rể']],
-    t:[['t1','Hoàng hôn bên sông'],['t4','Hoàng hôn bên sông'],['t2','Hoàng hôn bên sông'],['t5','Hoàng hôn bên sông'],['t3','Hoàng hôn bên sông'],['t8','Hoàng hôn bên sông'],['t6','Hoàng hôn bên sông'],['t9','Hoàng hôn bên sông'],['t7','Hoàng hôn bên sông']],
-    l:[['l1','Góc phố cổ'],['l2','Góc phố cổ'],['l3','Góc phố cổ'],['l4','Góc phố cổ'],['l5','Góc phố cổ'],['l10','Góc phố cổ'],['l9','Góc phố cổ'],['l8','Góc phố cổ'],['l11','Góc phố cổ']]
+    s:[['ps01','Studio'],['ps02','Studio'],['ps03','Studio'],['ps04','Studio'],['ps05','Studio'],['ps06','Studio'],['ps07','Studio'],['ps08','Studio'],['ps09','Studio'],['ps10','Studio'],['ps11','Studio'],['ps12','Studio'],['ps13','Studio']],
+    t:[['pt01','Hoàng hôn bên sông'],['pt02','Hoàng hôn bên sông'],['pt03','Hoàng hôn bên sông'],['pt04','Hoàng hôn bên sông'],['pt05','Hoàng hôn bên sông'],['pt06','Hoàng hôn bên sông'],['pt07','Hoàng hôn bên sông'],['pt08','Hoàng hôn bên sông'],['pt09','Hoàng hôn bên sông'],['pt10','Hoàng hôn bên sông'],['pt11','Hoàng hôn bên sông'],['pt12','Hoàng hôn bên sông'],['pt13','Hoàng hôn bên sông'],['pt14','Hoàng hôn bên sông'],['pt15','Hoàng hôn bên sông'],['pt16','Hoàng hôn bên sông']],
+    l:[['pl01','Góc phố cổ'],['pl02','Góc phố cổ'],['pl03','Góc phố cổ'],['pl04','Góc phố cổ'],['pl05','Góc phố cổ'],['pl06','Góc phố cổ'],['pl07','Góc phố cổ'],['pl08','Góc phố cổ'],['pl09','Góc phố cổ'],['pl10','Góc phố cổ'],['pl11','Góc phố cổ']]
   };
   var cur='s',list=[],idx=0,grid=$('#grid');
   function render(k){
     cur=k;list=G[k];grid.innerHTML='';
     list.forEach(function(it,i){
       var f=document.createElement('figure'),im=new Image();
-      im.src=IMG+it[0]+'.webp';im.alt=it[1];im.loading='lazy';
+      im.src=IMG+it[0]+'.webp';im.alt=it[1];im.decoding='async';var tries=0;im.onerror=function(){if(tries++<3){var u=im.src.split('?')[0];setTimeout(function(){im.src=u+'?r='+tries},600*tries)}};
       f.appendChild(im);f.onclick=function(){open(i)};grid.appendChild(f);
     });
     $$('.tab').forEach(function(t){t.setAttribute('aria-selected',t.dataset.g===k)});
@@ -109,7 +98,7 @@
         var nm=sl.replace(/[-_+]+/g,' ').replace(/\s+/g,' ').trim().split(' ').map(function(w){return w.charAt(0).toUpperCase()+w.slice(1)}).join(' ').slice(0,40);
         if(nm)GU={name:nm,plus:false};
       }
-      if(GU)document.title='Trân trọng kính mời '+(/^(Chị|Cô|Thầy|Anh|Em|Chú|Bác|C\.)/.test(GU.name)?'':'Bạn ')+GU.name+' | Thiệp cưới Văn Tuấn & Ngọc Trâm';
+      if(GU)document.title='Trân trọng kính mời '+(/^(Chị|Cô|Thầy|Anh|Em|Chú|Bác|Bạn|Gia đình|C\.)/.test(GU.name)?'':'Bạn ')+GU.name+' | Thiệp cưới Văn Tuấn & Ngọc Trâm';
     }
   }
   if(GU&&GU.name){
