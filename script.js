@@ -1,5 +1,5 @@
 (function(){
-  var IMG=(location.pathname.indexOf('/for/')===0?'/':'')+'img/';
+  var IMG='/img/';
   /* ===== CONFIG: nội dung sự kiện (chỉ dùng dữ liệu từ thiệp) ===== */
   var EVENT={
     title:'Lễ cưới Văn Tuấn & Ngọc Trâm',
