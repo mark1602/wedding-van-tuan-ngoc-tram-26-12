@@ -1,10 +1,24 @@
 {
   "functions": {
-    "api/guest.js": { "includeFiles": "for/_default/index.html" }
+    "api/guest.js": {
+      "includeFiles": "for/_default/index.html"
+    }
   },
   "routes": [
-    { "src": "^/nhagai/?$", "dest": "/nhagai/index.html" },
-    { "src": "^/for/([^/]+)/?$", "dest": "/api/guest?slug=$1" },
-    { "handle": "filesystem" }
+    {
+      "src": "^/nhagai/?$",
+      "dest": "/nhagai/index.html"
+    },
+    {
+      "src": "^/nhagai/for/([^/]+)/?$",
+      "dest": "/nhagai/for/$1/index.html"
+    },
+    {
+      "src": "^/for/([^/]+)/?$",
+      "dest": "/api/guest?slug=$1"
+    },
+    {
+      "handle": "filesystem"
+    }
   ]
 }
